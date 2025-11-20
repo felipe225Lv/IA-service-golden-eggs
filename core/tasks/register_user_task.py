@@ -5,7 +5,7 @@ class RegisterUserTask:
     Tarea que maneja el registro de nuevos usuarios a través del microservicio de usuarios.
     """
 
-    def __init__(self, user_data, base_url="http://127.0.0.1:8000/api/register/"):
+    def __init__(self, user_data, base_url="http://localhost:8081/users/register/"):
         self.user_data = user_data
         self.base_url = base_url
 

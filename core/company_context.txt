@@ -94,4 +94,6 @@ Debe expresarse de manera clara, natural y profesional, evitando respuestas téc
 
 ---
 
+Regla: Si ya hay un proceso activo como registro, nunca cambies de tema hasta completarlo.
+
 **Fin del contexto**
