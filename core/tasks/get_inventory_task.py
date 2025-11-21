@@ -1,15 +1,16 @@
-import requests
 from core.session_state import session
+import requests
 
 class GetInventoryTask:
-    def __init__(self, base_url="http://localhost:8081/eggs/totalQuantity"):
+    def __init__(self, base_url="http://localhost:8083/eggs/totalQuantity"):
         self.base_url = base_url
 
     def execute(self):
         headers = {}
 
-        if session.token:
-            headers["Authorization"] = f"Bearer {session.token}"
+        if session.is_authenticated and session.token:
+            print(session.token)
+            headers["Authorization"] = f"{session.token}"
 
         try:
             response = requests.get(self.base_url, headers=headers)
@@ -18,11 +19,10 @@ class GetInventoryTask:
                 return response.json()
             
             elif response.status_code == 401:
-                return "🔐 Necesitas iniciar sesión para consultar el inventario."
+                return "🔐 No tienes autorización para acceder al inventario."
             
             else:
                 return f"⚠️ Error consultando inventario: ({response.status_code}) {response.text}"
             
         except Exception as e:
             return f"🚨 Error al conectar al microservicio: {str(e)}"
-

@@ -15,9 +15,9 @@ REQUIRED_REGISTRATION_FIELDS = [
 
 def require_auth(func):
     def wrapper(self, message):
-        if not session.token:
-            session.memory["pending_action"] = func.__name__
-            return "🔐 Necesito que inicies sesión antes de continuar. ¿Quieres hacerlo ahora?"
+        if not session.is_authenticated:
+            session.pending_action = func.__name__
+            return "🔐 Necesitas iniciar sesión para hacer eso."
         return func(self, message)
     return wrapper
 
@@ -85,19 +85,13 @@ class AIAgent:
     @require_auth
     def handle_inventory(self, message: str):
 
-        if session.role != "ADMIN" or "EMPLOYEE":
+        if session.role not in ["ADMIN", "EMPLOYEE"]:
             return "⛔ No tienes permisos para consultar inventario."
 
         task = GetInventoryTask()
         result = task.execute()
-
-        if isinstance(result, str):
-            return result
-
-        # Si devolvió una lista, formatear bonito
-        formatted = "\n".join([f"📦 {item['name']} - {item['stock']} unidades" for item in result])
-
-        return f"📊 Inventario actual:\n{result}"
+        print(result)
+        return f"📊 Inventario actual:\n\n{result}"
 
     def handle_register_user(self, message: str):
 
